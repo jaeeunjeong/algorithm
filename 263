@@ -55,6 +55,7 @@ public class MovieRepository {
         template.execute("CREATE TABLE movies (id bigint auto_increment primary key, name VARCHAR(50), year int, rating int) ");
     }
     //Using JdbcTemplate, createMovie method should insert a new row into the movies table with the specified data.
+    
     public void createMovie(String name, int year, int rating) {
     	String sql = "INSERT INTO movies (name, year, rating) VALUES (?, ?, ?)";
     	template.update(sql, new Object[]{name, year, rating});
@@ -64,21 +65,25 @@ public class MovieRepository {
      * in which the name of the movie contains the likeName string, using the LIKE operator. 
      * */
     
-    public List<Movie> findMoviesByName(String likeName) {
-        AnnotationConfigApplicationContext config = new AnnotationConfigApplicationContext();
-        config.register(Config.class);
-        config.refresh();
-    	String sql = "SELECT * FROM movies WHERE name LIKES ? ";
+    public List<Movie> findMoviesByName(AnnotationConfigApplicationContext config, String likeName) {
+    	String sql = "SELECT name, year, rating FROM movies WHERE name LIKE " + likeName +" ";
     	MovieRepository repository = config.getBean(MovieRepository.class);
-    	List<Movie> movie = (List<Movie>) template.queryForMap(sql,likeName, repository);
-
-
+    	List<Movie> movie = (List<Movie>) template.query(sql,
+    			 (rs, rowNum) -> new Movie(rs.getString("name"), rs.getInt("year"), rs.getInt("rating"))
+    			 );
     	
+    	
+
         return movie;
     }
     
+    public List<Movie> findMoviesByName(String likeName) {
+        return template.query("SELECT name, year, rating FROM   movies WHERE name LIKE '" + likeName + "'", 
+              (rs, rowNum) -> new Movie(rs.getString("name"), rs.getInt("year"), rs.getInt("rating")));
+     }
+    
     public static void main(String[] args) {
-        AnnotationConfigApplicationContext config = new AnnotationConfigApplicationContext();
+    	AnnotationConfigApplicationContext config = new AnnotationConfigApplicationContext();
         config.register(Config.class);
         config.refresh();
         MovieRepository repository = config.getBean(MovieRepository.class);
@@ -87,8 +92,8 @@ public class MovieRepository {
         repository.createMovie("Some other movie", 1993, 2);
 
         List<Movie> movies = repository.findMoviesByName("Some%");
+        //List<Movie> movies = repository.findMoviesByName(config, "Some%");
         for(Movie movie : movies) {
             System.out.println(movie.name + " - " + movie.year + " - " + movie.rating);
         }
     }
-}
