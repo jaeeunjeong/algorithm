@@ -1,0 +1,44 @@
+//https://www.codewars.com/kata/5277c8a221e209d3f6000b56/java
+
+
+import java.util.*;
+
+public class ValidBrackets
+{
+    public static boolean isValid(String brackets) {
+    	Stack<Character> st = new Stack<Character>();
+
+    	brackets = brackets.trim();
+    	
+    	for (int i = 0; i < brackets.length(); i++) {
+    		char ch = brackets.charAt(i);
+    		switch (ch) {
+    			case '[':
+    			case '{':
+    			case '(':
+					st.add(ch);
+					break;
+	    		case ']':
+	    		case '}':
+	    		case ')':
+    				if(st.isEmpty())
+    					return false;
+    				char popCh = st.pop();
+    				if( (popCh == '[' && ch != ']') || (popCh == '{' && ch != '}') ||(popCh == '(' && ch != ')')) {    					
+    					return false;
+    				}else {
+    					break;
+    				}
+	    		default:
+	    			return false;
+    		}
+        	
+		}
+
+    	return true;
+    }
+    
+    public static void main(String[] args) {
+        System.out.println(ValidBrackets.isValid(") ( } { ] ["));
+    }
+}
