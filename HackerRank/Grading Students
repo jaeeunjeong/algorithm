@@ -1,3 +1,4 @@
+//https://www.hackerrank.com/challenges/grading/problem
 import java.io.*;
 import java.math.*;
 import java.security.*;
@@ -17,10 +18,19 @@ class Result {
 
     public static List<Integer> gradingStudents(List<Integer> grades) {
     // Write your code here
-    
+        List<Integer> pointResult = new ArrayList<>();
         for (int i = 0; i < grades.size(); i++) {
-
+            int point = grades.get(i);
+                
+            if(point < 38){
+                pointResult.add(point);
+            }else if(Math.round(point)%5 >= 3){
+                pointResult.add(((Math.round(point)/5)+1)*5);
+            }else{
+                pointResult.add(point);
+            }
         }
+        return pointResult;
 
     }
 
