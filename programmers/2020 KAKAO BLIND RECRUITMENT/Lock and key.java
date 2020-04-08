@@ -1,15 +1,23 @@
+package com.mobigen.customized.kigam.user;
+
 class Solution {
     public static boolean solution(int[][] key, int[][] lock) {
         boolean answer = false;
         int[][] extendLock = extendLock(lock);
-        while(!answer){
+        while(!answer){// 완전 탐색!!!
 	        for (int i = 0; i < key.length; i++) {
 				for (int j = 0; j < key.length; j++) {
-					//검증로직 수정해야함
 					if((extendLock[i][j] + key[i][j]) != 1) {
                         continue;
 				    }else {
                         answer = true;
+                        System.out.print(extendLock[0][0]);
+                        System.out.print(extendLock[0][1]);
+                        System.out.print(extendLock[0][2]);
+                        System.out.println();
+                        System.out.print(extendLock[1][0]);
+                        System.out.print(extendLock[1][1]);
+                        System.out.print(extendLock[1][2]);
                         break;
                     }
                 }
@@ -44,6 +52,7 @@ class Solution {
 public static void main(String[] args) {
 	int[][] key= {{0, 0, 0}, {1, 0, 0}, {0, 1, 1}};
 	int[][] lock = {{1, 1, 1}, {1, 1, 0}, {1, 0, 1}};
-	solution(key,lock);
+	int[][] answer= {{0, 0, 0}, {1, 0, 0}, {0, 1, 1}};
+	System.out.println(solution(key,lock));
 }
 }
