@@ -1,7 +1,8 @@
+//https://programmers.co.kr/learn/courses/30/lessons/42840
 import java.util.ArrayList;
 
 class Solution {
-    public int[] solution(int[] answers) {//3개임
+        public static int[] solution(int[] answers) {//3개임
         int[] answer = {};
         int answer_1[] = {1, 2, 3, 4, 5};
         int answer_2[] = {2, 1, 2, 3, 2, 4, 2, 5};
@@ -12,7 +13,6 @@ class Solution {
         int answerCnt3 = 0;
         
         for (int i = 0; i < answers.length; i++) {
-			for (int j = 0; j < answer.length; j++) {
 				if(answers[i] == answer_1[i % 5] ){
 					answerCnt1++;
 				}
@@ -22,24 +22,28 @@ class Solution {
 				if(answers[i] == answer_3[i % 10]){
 					answerCnt3++;
 				}
-			}
 		}
         
         int max = Math.max(answerCnt1, Math.max(answerCnt2, answerCnt3));
+        int maxCnt = 0;
         ArrayList<Integer> arrList = new ArrayList<>();
         if(max == answerCnt1){
             arrList.add(1);
-        }
-        if(max == answerCnt2)
+            maxCnt++;
+        }   
+        if(max == answerCnt2){
             arrList.add(2);
-        if(max == answerCnt3)
+            maxCnt++;
+        }   
+        if(max == answerCnt3){
             arrList.add(3);
+            maxCnt++;
+        }   
         
-        int size = arrList.size();
-        answer = new int[size];
+        answer = new int[maxCnt];
             
-        for(int i =0; i<size; i++){
-            answer[i] = arrList.get(i);
+        for(int i =0; i<maxCnt; i++){
+                 answer[i] = arrList.get(i); 
         }
         
         return answer;
