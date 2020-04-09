@@ -23,14 +23,14 @@ class Solution {
         for (int i = 0; i < combineNum.size(); i++) {
 			int nbr = Integer.parseInt(combineNum.get(i));
 			for (int j = 2; j < nbr-1; j++) {
-				if(nbr % j == 0 ){
+				if(nbr == 1 || nbr % j == 0 ){
 					isPrime = false;
 					break;
 				}
 			}
-			if(isPrime) answer++;
+			if(isPrime) System.out.println(nbr);//answer++;
 		}
-        System.out.println(answer);
+       // System.out.println(answer);
         return answer;
     }
     
@@ -43,11 +43,8 @@ class Solution {
 	 */
     public static List<String> permutation(char[] pieceNum, List<String>combineNum) {
     	//init
-    	char init = 1;
     	if (combineNum.size() == 0) {
     		for (int i = 0; i < pieceNum.length; i++) {
-    			if(pieceNum[i]== init) continue;
-    			System.out.println(pieceNum[i]);
     			combineNum.add(pieceNum[i]+"");
 			}
 		}else {
