@@ -22,15 +22,15 @@ class Solution {
         boolean isPrime = true;
         for (int i = 0; i < combineNum.size(); i++) {
 			int nbr = Integer.parseInt(combineNum.get(i));
+			if (Integer.compare(1, nbr) == 0) continue;
 			for (int j = 2; j < nbr-1; j++) {
-				if(nbr == 1 || nbr % j == 0 ){
+				if(nbr % j == 0 ){
 					isPrime = false;
 					break;
 				}
 			}
-			if(isPrime) System.out.println(nbr);//answer++;
+			if(isPrime) answer++;
 		}
-       // System.out.println(answer);
         return answer;
     }
     
@@ -45,6 +45,10 @@ class Solution {
     	//init
     	if (combineNum.size() == 0) {
     		for (int i = 0; i < pieceNum.length; i++) {
+    			if(pieceNum[i] == '0' ) continue;
+				for (int j = 0; j < combineNum.size(); j++) {
+					if((pieceNum[i]+"") == combineNum.get(j)) continue;
+				}
     			combineNum.add(pieceNum[i]+"");
 			}
 		}else {
@@ -54,7 +58,10 @@ class Solution {
 	    				continue;
 	    			}else{
 	    				String num = combineNum.get(i) + pieceNum[k];
-	    				if (num.startsWith("0")) continue;
+	    				if (num.startsWith("0")) num = num.substring(1);
+	    				for (int j = 0; j < combineNum.size(); j++) {
+							if(num == combineNum.get(j)) continue;
+						}
 	    				combineNum.add(num);
 	    			}
 				}
@@ -63,6 +70,6 @@ class Solution {
 		return combineNum;
 	}
     public static void main(String[] args) {
-		solution("17");
+		solution("011");
 	}
 }
