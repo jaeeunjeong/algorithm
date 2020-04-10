@@ -9,10 +9,8 @@ class Solution {
     public static int solution(String numbers) {
         int answer = 0;
         //숫자 조합 만들기
-        char []pieceNum = numbers.toCharArray();
+        String []pieceNum = numbers.split("");
         List<String> combineNum = new ArrayList<String>();
-        int cnt = 0;
-        Set<Integer> sosuList = new HashSet<>();
         
         for (int i = 0; i < pieceNum.length; i++) {
         	combineNum = permutation(pieceNum, combineNum);
@@ -41,15 +39,16 @@ class Solution {
 	 * @param comStrings 만들어진 조합들
 	 * @param charset  읽어들일 charset
 	 */
-    public static List<String> permutation(char[] pieceNum, List<String>combineNum) {
+    public static List<String> permutation(String [] pieceNum, List<String>combineNum) {
     	//init
+    	boolean dup = false;
     	if (combineNum.size() == 0) {
     		for (int i = 0; i < pieceNum.length; i++) {
-    			if(pieceNum[i] == '0' ) continue;
+    			if(pieceNum[i].equals("0")) continue;
 				for (int j = 0; j < combineNum.size(); j++) {
-					if((pieceNum[i]+"") == combineNum.get(j)) continue;
+					if((pieceNum[i]).equals(combineNum.get(j))) dup = true;
 				}
-    			combineNum.add(pieceNum[i]+"");
+				if(!dup)  combineNum.add(pieceNum[i]);
 			}
 		}else {
 	    	for (int i = 0; i < combineNum.size(); i++) {
