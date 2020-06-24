@@ -52,12 +52,10 @@ class Result {
               System.out.println("A="+divisor+":"+ multiple+":"+nbrA);
        if(divisor%multiple == 0){
            ++cnt;
-       }else{
-           continue;
        }
-       multiple = nbrA*(cnt+1);
+       multiple =multiple+nbrA;
 
-       System.out.println(multiple);
+       System.out.println("aa "+multiple);
    }
 
    return cnt;
