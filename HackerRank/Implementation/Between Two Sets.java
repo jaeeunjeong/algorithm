@@ -31,14 +31,14 @@ class Result {
    int divisor  = 1;
    int nbrA =  b.get(0);
    //divisor = gcd( nbrA, a.get(1));
-   for(int i = 1; i<b.size(); i++){
+   for(int i = 0; i<b.size(); i++){
         int nbrB = b.get(i);
         //b에서 공약수 찾기
         divisor = gcd( nbrA, nbrB);
         nbrA = divisor;
    }
    nbrA =  a.get(0);
-   for(int i = 1; i<a.size(); i++){
+   for(int i = 0; i<a.size(); i++){
         int nbrB = a.get(i);
         //b에서 공약수 찾기
         multiple = lcd( nbrA, nbrB);
@@ -49,13 +49,10 @@ class Result {
    //a의 최소공배수 <b의 최대공약수
 
    while(multiple <= divisor){
-              System.out.println("A="+divisor+":"+ multiple+":"+nbrA);
        if(divisor%multiple == 0){
-           ++cnt;
+           cnt++;
        }
        multiple =multiple+nbrA;
-
-       System.out.println("aa "+multiple);
    }
 
    return cnt;
@@ -74,9 +71,7 @@ class Result {
        return a * (b / gcd(a,b));
    }
 
-}
-
-public class Solution {
+}public class Solution {
    public static void main(String[] args) throws IOException {
        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
        BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(System.getenv("OUTPUT_PATH")));
