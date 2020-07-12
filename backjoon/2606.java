@@ -24,6 +24,7 @@ public class Main {
         }
         
         //dfs      
+	cnt = 0;
         dfs(1);
         System.out.println(cnt);
         
