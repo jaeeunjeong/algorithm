@@ -12,7 +12,7 @@ import static java.util.stream.Collectors.toList;
 
 
 
-class Result {
+class CircularQueue {
 
     static class Queue {
         public static final int C = 26;
