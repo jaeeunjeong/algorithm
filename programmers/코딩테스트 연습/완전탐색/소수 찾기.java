@@ -1,85 +1,65 @@
-//https://programmers.co.kr/learn/courses/30/lessons/42839
-package myparking;
+import java.io.*;
+import java.math.*;
+import java.security.*;
+import java.text.*;
+import java.util.*;
+import java.util.concurrent.*;
+import java.util.regex.*;
 
-
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-class Solution {
-    public static int solution(String numbers) {
+class Solution {	
+    static Set<Integer> numberSet = new LinkedHashSet<Integer>();
+    public int solution(String numbers) {
         int answer = 0;
-        //숫자 조합 만들기
-        String []pieceNum = numbers.split("(?<!^)");
-        List<String> combineNum = new ArrayList<String>();
-        
-        for (int i = 0; i < pieceNum.length; i++) {
-        	combineNum = permutation(pieceNum, combineNum);
+        //1. 모든 경우의 수 만들기
+        //-> integer로 해서 set에다가 넣어야함.
+        for (int i = 1; i <= numbers.length(); i++) {
+        	permutation(numbers.toCharArray(),0,numbers.length(), i); //n개중에 r 개 뽑는 경우
 		}
+        //2. 소수인지 파악하기.
+        //  소수인지 파악 방법 : 2부터 자기자신까지 나누어지는 수가 있는지 확인.
+        for(int nbr : numberSet) {
+        	if(isPrime(nbr)) answer++;
+        }
         
-        //소수 감별하기...에라토스테네스의 접근으로 해볼것.
-        boolean isPrime = true;
-        for (int i = 0; i < combineNum.size(); i++) {
-			int nbr = Integer.parseInt(combineNum.get(i));
-			if (Integer.compare(1, nbr) == 0) continue;
-			for (int j = 2; j < nbr-1; j++) {
-				if(nbr % j == 0 ){
-					isPrime = false;
-					break;
-				}
-			}
-			if(isPrime) answer++;
-		}
-        System.out.println("an : "+answer);
         return answer;
     }
-    
-	/**
-	 * 순열 만들기
-	 * for문 안에 위치해야함.
-	 * @param pieceNum 사용 가능한 숫자들
-	 * @param comStrings 만들어진 조합들
-	 * @param charset  읽어들일 charset
-	 */
-    public static List<String> permutation(String [] pieceNum, List<String>combineNum) {
-    	boolean dup = false;
-    	//init
-    	if (combineNum.size() == 0) {
-    		for (int i = 0; i < pieceNum.length; i++) {
-    			if(pieceNum[i].equals("0")) continue;
-				for (int j = 0; j < combineNum.size(); j++) {
-					if((pieceNum[i]).equals(combineNum.get(j))) dup = true;
-				}
-				if(!dup) {
-					combineNum.add(pieceNum[i]);
-					dup = false;
-				}
-			}
-		}else {
-	    	for (int i = 0; i < combineNum.size(); i++) {
-	    		for (int k = 0; k < pieceNum.length; k++) {
-//	    			if(combineNum.get(i).indexOf(pieceNum[k]) > -1){//처음에 값 넣을 때 중복 여부 확인
-//	    				continue;
-	    				String num = combineNum.get(i) + pieceNum[k];
-	    				if (num.startsWith("0")) num = num.substring(1);
-	    				for (int j = 0; j < combineNum.size(); j++) {//중복인지 검증
-							if((num).equals(combineNum.get(j))) {
-								dup = true;
-								continue;
-							}
-						}
-	    				if(!dup) {
-	    					combineNum.add(num);
-	    				}
-	    				dup = false;//이거 안 되는 느낌임
-	    			//  }
-				}
-			}
+    public static void permutation(char[] arr, int start, int n, int end) {
+    	if(start == end) {
+    		StringBuffer sb = new StringBuffer();
+    		for (int i = 0; i < end; i++) {
+    			sb.append(arr[i]);
 		}
-		return combineNum;
-	}
-    public static void main(String[] args) {
-		solution("011");
-	}
+    		
+    		//여기서 input해야함.
+    		int result = Integer.parseInt(sb.toString());
+    				
+    		if(!numberSet.contains(result)) {
+    			numberSet.add(result);
+    		}
+    		
+    		return;
+    	}
+    	for (int i = start; i < n; i++) {
+    		swap(arr, start, i);
+    		permutation(arr, start+1, n, end);
+    		swap(arr, start, i);
+		}
+    }
+    
+    public static void swap(char[] arr, int start, int i) {
+    	char temp = arr[start];
+    	arr[start] = arr[i];
+    	arr[i] = temp;
+    }
+
+    public static boolean isPrime(int nbr) {
+    	boolean result =true;
+    	if(nbr < 1) return false;
+    	for (int i = 2; i < nbr; i++) {
+    		
+			if(nbr%i == 0) result = false;
+		}
+    	
+    	return result;
+    }
 }
