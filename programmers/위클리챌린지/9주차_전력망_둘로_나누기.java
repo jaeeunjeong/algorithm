@@ -1,6 +1,15 @@
 //https://programmers.co.kr/learn/courses/30/lessons/86971
 import java.util.*;
-
+/**
+ * DFS! 트리문제 같지만 트리는 아니고 그냥 완전 탐색문제이다.
+ * 
+ * 간선간의 연결을 해주고, 연결을 끊어가며 제일 차이가 작은 값을 확인해줘야한다.
+ * leaf노드까지 확인해야해서 dfs로 확인해야한다.
+ * 
+ * 탐색지점은 두 경로가 겹치는, 공통 노드가 없을 거라서 방문처리를 기준으로 다 돌려도 되고,
+ * 끊어진 지점을 기준으로 확인해도 된다. 트리는 어디든지 루트라는 성질을 이용.
+ * 방문 처리를 잘 해줘서 실수를 방지하자.
+ */
 class Solution {
 	static boolean[][] map;
 	static boolean[] marked;
