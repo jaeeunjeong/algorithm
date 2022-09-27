@@ -8,7 +8,7 @@ import java.util.*;
  * 이후 행/열 기준 정렬도 추가.
  */
 public class Main {
-	static int[][] map, seatInfo;
+	static int[][] map;
 	static int N;
 	static boolean[][] marked;
 	static int[][] dirs = { { 0, -1 }, { -1, 0 }, { 0, 1 }, { 1, 0 } };
@@ -19,7 +19,6 @@ public class Main {
 		st = new StringTokenizer(br.readLine());
 		N = Integer.parseInt(st.nextToken());
 		map = new int[N][N];
-		seatInfo = new int[N * N + 1][2];
 		int[][] friends = new int[N * N + 1][4];
 		for (int i = 0; i < N * N; i++) {
 			st = new StringTokenizer(br.readLine());
@@ -57,7 +56,6 @@ public class Main {
 
 			Seat result = pq.poll();
 			map[result.row][result.col] = student;
-			seatInfo[student] = new int[] { result.row, result.col };
 		}
 
 		// 점수 매기기
