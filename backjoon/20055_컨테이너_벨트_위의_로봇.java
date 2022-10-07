@@ -1,3 +1,4 @@
+
 //https://www.acmicpc.net/problem/20055
 import java.io.*;
 import java.util.*;
@@ -33,10 +34,10 @@ class Main {
 		while (true) {
 			rotate();
 			move();
-	        if(!upperBelt[0] && stats[0]>0){
-	            upperBelt[0]=true;
-	            stats[0]--;
-	        }
+			if (!upperBelt[0] && stats[0] > 0) {
+				upperBelt[0] = true;
+				stats[0]--;
+			}
 			if (isFinish(M))
 				break;
 			step++;
@@ -47,36 +48,37 @@ class Main {
 
 	public static void rotate() {
 		for (int i = N - 1; i > 0; i--) {
-			if (upperBelt[i-1]) {
+			if (upperBelt[i - 1]) {
 				upperBelt[i] = true;
-				upperBelt[i-1] = false;
+				upperBelt[i - 1] = false;
 			}
 		}
-		upperBelt[N-1] = false;
-		
-		int temp = stats[2*N-1];
-		for (int i = 2*N-1; i > 0; i--) {
-			stats[i] = stats[i-1];
+		upperBelt[N - 1] = false;
+
+		int temp = stats[2 * N - 1];
+		for (int i = 2 * N - 1; i > 0; i--) {
+			stats[i] = stats[i - 1];
 		}
 		stats[0] = temp;
-		
+
 	}
-	
+
 	public static void move() {
 		for (int i = N - 1; i > 0; i--) {
-			if (upperBelt[i-1] && !upperBelt[i] && stats[i] > 0) {
+			if (upperBelt[i - 1] && !upperBelt[i] && stats[i] > 0) {
 				upperBelt[i] = true;
-				upperBelt[i-1] = false;
+				upperBelt[i - 1] = false;
 				stats[i]--;
 			}
 		}
-		upperBelt[N-1]=false;
+		upperBelt[N - 1] = false;
 	}
 
 	public static boolean isFinish(int n) {
 		int cnt = 0;
 		for (int s : stats)
-			if (s == 0) cnt++;
+			if (s == 0)
+				cnt++;
 		return n > cnt ? false : true;
 	}
 
