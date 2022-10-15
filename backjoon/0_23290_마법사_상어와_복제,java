@@ -1,0 +1,213 @@
+import java.io.*;
+import java.util.*;
+
+/*
+ */
+public class Main {
+	static int[][] sharkMap, fishSmell; // 상어의 위치, 어떤 상어의 냄새가 남아있는지 확인용 맵, 냄새 시간 맵
+	static int M, S, max;
+	static Fish shark;
+	static ArrayList<Fish> fishes;
+	static ArrayList<Fish>[][] backupMap, moveMap; // backupMap 백업용 이고 최종 결과임!!!
+	static int[][] fishDir = new int[][] { { 0, -1 }, { -1, -1 }, { -1, 0 }, { -1, 1 }, //
+			{ 0, 1 }, { 1, 1 }, { 1, 0 }, { 1, -1 } };
+	static int[][] sharkMoveDir = new int[][] { {}, { -1, 0 }, { 0, -1 }, { 1, 0 }, { 0, 1 } };
+	static int[] sharkDir, finalSharkDir;
+
+	public static void main(String[] args) throws Exception {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st;
+		st = new StringTokenizer(br.readLine());
+		M = Integer.parseInt(st.nextToken());
+		S = Integer.parseInt(st.nextToken());
+		sharkMap = new int[5][5];
+		fishSmell = new int[5][5];
+		backupMap = new ArrayList[5][5];
+		moveMap = new ArrayList[5][5];
+		fishes = new ArrayList<>();
+		for (int i = 0; i < 5; i++) {
+			for (int j = 0; j < 5; j++) {
+				moveMap[i][j] = new ArrayList<>();
+			}
+		}
+		for (int i = 0; i < M; i++) {
+			st = new StringTokenizer(br.readLine());
+			int row = Integer.parseInt(st.nextToken());
+			int col = Integer.parseInt(st.nextToken());
+			Fish temp = new Fish(row, col);
+			temp.dir = Integer.parseInt(st.nextToken()) - 1;
+			moveMap[row][col].add(temp);
+
+		}
+		st = new StringTokenizer(br.readLine());
+		int row = Integer.parseInt(st.nextToken());
+		int col = Integer.parseInt(st.nextToken());
+		shark = new Fish(row, col);
+
+		sharkDir = new int[3];
+		finalSharkDir = new int[3];
+
+		while (S-- > 0) {
+			max = Integer.MIN_VALUE;
+			copyMap();
+			fishMove();
+			makeDir(0);
+			sharkMove();
+			removeSmellAndMakeSmell();
+			System.out.println(shark.row + ":" + shark.col);
+			magicMap();
+		}
+		int answer = count();
+		System.out.println(answer);
+	}
+
+	private static int count() {
+		int cnt = 0;
+		for (int i = 0; i <= 4; i++) {
+			for (int j = 0; j <= 4; j++) {
+				cnt += moveMap[i][j].size();
+			}
+		}
+		return cnt;
+	}
+
+	private static int print(ArrayList[][] map) {
+		int cnt = 0;
+		for (int i = 1; i <= 4; i++) {
+			for (int j = 1; j <= 4; j++) {
+				System.out.print(map[i][j].size() + " ");
+			}
+			System.out.println();
+		}
+		return cnt;
+	}
+
+	private static void magicMap() {
+		for (int i = 0; i <= 4; i++) {
+			for (int j = 0; j <= 4; j++) {
+				List<Fish> cur = backupMap[i][j];
+				for (Fish fish : cur) {
+					moveMap[i][j].add(fish);
+				}
+			}
+		}
+	}
+
+	private static void sharkMoveFinal() {
+		boolean[][] marked = new boolean[5][5];
+		int nextR = shark.row;
+		int nextC = shark.col;
+
+		for (int d : finalSharkDir) {
+			nextR += sharkMoveDir[d][0];
+			nextC += sharkMoveDir[d][1];
+			if (marked[nextR][nextC])
+				continue;
+			if (moveMap[nextR][nextC].size() > 0)
+				fishSmell[nextR][nextC] = 2;
+			moveMap[nextR][nextC].clear(); // 물고기 잡아먹힘.
+			marked[nextR][nextC] = true;
+		}
+		shark = new Fish(nextR, nextC);
+
+	}
+
+	private static void removeSmellAndMakeSmell() {
+		for (int i = 0; i <= 4; i++) {
+			for (int j = 0; j <= 4; j++) {
+				if (fishSmell[i][j] == 0)
+					continue;
+				fishSmell[i][j]--;
+			}
+		}
+
+		sharkMoveFinal();
+	}
+
+	private static int sharkMove() {
+		boolean[][] marked = new boolean[5][5];
+		int nextR = shark.row;
+		int nextC = shark.col;
+		int cnt = 0;
+		for (int d : sharkDir) {
+			nextR += sharkMoveDir[d][0];
+			nextC += sharkMoveDir[d][1];
+			if (nextR <= 0 || nextC <= 0 || nextR > 4 || nextC > 4)
+				return 0;
+			if (marked[nextR][nextC])
+				continue;
+			cnt += moveMap[nextR][nextC].size();
+			marked[nextR][nextC] = true;
+		}
+		return cnt;
+	}
+
+	private static void makeDir(int i) {
+		if (i == 3) {
+			int cur = sharkMove();
+			if (cur > max) {
+				max = cur;
+				finalSharkDir[0] = sharkDir[0];
+				finalSharkDir[1] = sharkDir[1];
+				finalSharkDir[2] = sharkDir[2];
+			}
+			return;
+		}
+		for (int j = 1; j <= 4; j++) {
+			sharkDir[i] = j;
+			makeDir(i + 1);
+		}
+	}
+
+	private static void fishMove() {
+		for (Fish fish : fishes) {
+			for (int i = 8; i > 0; i--) {
+				int curD = (fish.dir + i) % 8;
+				int nextR = fish.row + fishDir[curD][0];
+				int nextC = fish.col + fishDir[curD][1];
+				if (nextR <= 0 || nextC <= 0 || nextR > 4 || nextC > 4)
+					continue;
+				if (shark.row == nextR && shark.col == nextC)
+					continue;
+				if (fishSmell[nextR][nextC] > 0)
+					continue;
+
+				Fish result = new Fish(nextR, nextC);
+				result.dir = curD;
+				moveMap[nextR][nextC].add(result);
+
+				break;
+			}
+		}
+	}
+
+	private static void copyMap() {
+		for (int i = 0; i < 5; i++) {
+			for (int j = 0; j < 5; j++) {
+				backupMap[i][j] = new ArrayList<>();
+			}
+		}
+
+		for (int i = 0; i <= 4; i++) {
+			for (int j = 0; j <= 4; j++) {
+				List<Fish> cur = moveMap[i][j];
+				for (Fish fish : cur) {
+					backupMap[i][j].add(fish);
+					fishes.add(fish);
+				}
+				moveMap[i][j].clear(); // 물고기로만 할거라서 해도 됨!!!
+			}
+		}
+	}
+
+	static class Fish {
+		int row;
+		int col;
+		int dir;
+
+		Fish(int row, int col) {
+			this.row = row;
+			this.col = col;
+		}
+	}
+}
