@@ -1,6 +1,8 @@
 import java.io.*;
 import java.util.*;
-
+/*
+* 폭탄은 하나터지고 당기고 하나 터지고 
+*/
 public class Main {
 	// static int[][] dirs = { { -1, 0 }, { 1, 0 }, { 0, -1 }, { 0, 1 } };
 	static int[][] map;
